@@ -33,11 +33,16 @@
 
     <tbody>
      {% for event in events%}
+      {{event.status_event}}
         <tr>
             <th scope="row">{{event.id}}</th>
             <td>{{event.event_date}}</td>
             <td>{{event.event_name}}</td>
-            <td>{{event.status_event}}</td>
+            {% if event.status_event %}
+              <td><div class="btn btn-primary">Active</div></td>
+            {% else %}
+              <td><div class="btn btn-danger">Deactive</div></td>
+            {% endif %}
         </tr>
       {% endfor %}
     </tbody>

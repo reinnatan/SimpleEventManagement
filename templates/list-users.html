@@ -49,7 +49,11 @@ $( function() {
             <td>{{user.full_name}}</td>
             <td>{{user.address}}</td>
             <td>{{user.phone_number}}</td>
-            <td>{{user.is_active}}</td>
+            {% if user.is_active %}
+              <td><div class="btn btn-primary">Active</div></td>
+            {% else %}
+              <td><div class="btn btn-danger">Deactive</div></td>
+            {% endif %}
         </tr>
       {% endfor %}
     </tbody>

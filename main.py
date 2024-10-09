@@ -39,12 +39,12 @@ class Users(db.Model):
     
 @app.route('/')
 def home():
-    events = db.session.query(Events.id, Events.event_date, Events.event_name).all()
+    events = db.session.query(Events.id, Events.event_date, Events.event_name, Events.status_event).all()
     return render_template('index.html', events=events)
 
 @app.route('/list-users')
 def list_users():
-    list_users = db.session.query(Users.id, Users.full_name, Users.address, Users.phone_number).all() 
+    list_users = db.session.query(Users.id, Users.full_name, Users.address, Users.phone_number, Users.is_active).all() 
     return render_template('list-users.html', list_users=list_users)
 
 @app.route('/add-user', methods=['POST'])
