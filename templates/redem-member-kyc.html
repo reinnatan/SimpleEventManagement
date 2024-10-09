@@ -1,15 +1,39 @@
 {% include 'header.html' %}
 
+
+<script>
+    $(document).ready(function(){
+        var strContent = '<p id="input-select-value"><h5 class="card-title">Event Name</h5>'+
+                            '<select name="event_value" id="event_value">'+
+                                '{% for event in events%} <option value={{event.id}}>{{event.event_name}}</option>{% endfor %}</select>'+
+                                '<br/><br/><h5 class="card-title">Users</h5><select name="user_value" id="user_value">{% for user in users%}<option value={{user.id}}>{{user.full_name}}</option> {% endfor %}'+
+                                ' </select></p>';
+       
+        $("#create-redeem").click(function(){
+            
+            let dialog = xdialog.create({title: 'Hello, xdialog', body: strContent, 
+                onok:function(){
+                },
+                oncancel:function(){
+                }
+        });
+            dialog.show();
+        });
+    });
+</script>
+
 </div>
     <div class="card-body">
         <form action="/add-event" method="POST">
             <p class="card-text"><input type="text" name="event_date" class="form-control" placeholder="Enter KYC" aria-label="Event Start End" aria-describedby="basic-addon1"></p>
-            <button type="submit" class="btn btn-primary">Save</button>
+            <button type="submit" class="btn btn-primary">Search</button>
         </form>
     </div>
 </div>
 
-<table class="table table-striped"></table>
+<button type="button" class="btn btn-success" id="create-redeem">Create Redeem</button>
+<br/><br/>
+<table class="table table-striped">
     <thead>
       <tr>
         <th scope="col">ID</th>
@@ -22,7 +46,6 @@
 
     <tbody>
      {% for event in events%}
-      {{event.status_event}}
         <tr>
             <th scope="row">{{event.id}}</th>
             <td>{{event.event_date}}</td>
@@ -36,5 +59,7 @@
         </tr>
       {% endfor %}
     </tbody>
-   
   </table>
+
+
+

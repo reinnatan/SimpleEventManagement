@@ -96,7 +96,9 @@ def list_event():
 
 @app.route('/redem-member-kyc')
 def redem_member_kyc():
-    return render_template('redem-member-kyc.html')
+    users = Users.query.all()
+    events = Events.query.all()
+    return render_template('redem-member-kyc.html', events = events, users = users)
 
 if __name__ == "__main__":
     app.run()
