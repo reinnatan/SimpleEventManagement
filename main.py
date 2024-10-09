@@ -24,7 +24,8 @@ class Events(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     event_date = db.Column(db.String(50), unique=False, nullable=False)
     event_name = db.Column(db.String(100), unique=False, nullable=False)
-    status_event = db.Column(db.Boolean, unique=False, nullable=False)
+    status_event = db.Column(db.Boolean, unique=False, nullable=True)
+    max_redem = db.Column(db.Integer, unique=False, nullable=True)
     users = db.relationship('Users', secondary=events_users, backref=db.backref('event_assigned_users', lazy=True))
 
 class Users(db.Model):
@@ -40,7 +41,7 @@ class Users(db.Model):
     
 @app.route('/')
 def home():
-    events = db.session.query(Events.id, Events.event_date, Events.event_name, Events.status_event).all()
+    events = db.session.query(Events.id, Events.event_date, Events.event_name, Events.status_event, Events.max_redem).all()
     return render_template('index.html', events=events)
 
 @app.route('/list-users')
@@ -75,9 +76,14 @@ def add_event():
     event_date = request.form.get('event_date')
     event_name = request.form.get('event_name')
     activate_deactive = request.form.get('activate_deactive')
-    if event_date != '' and event_name != '' and activate_deactive !='':
+    event_max_redem = request.form.get('event_max_redem')
+    try:
+        event_max_redem = int(event_max_redem)
+    except:
+        event_max_redem = 0
+    if event_date != '' and event_name != '' and activate_deactive !='' and event_max_redem !='':
         activate_deactive = eval(activate_deactive)
-        event_model = Events(event_date = event_date, event_name = event_name, status_event = activate_deactive)
+        event_model = Events(event_date = event_date, event_name = event_name, status_event = activate_deactive, max_redem=event_max_redem)
         db.session.add(event_model)
         db.session.commit()
         return redirect("/")

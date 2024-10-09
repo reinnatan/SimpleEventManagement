@@ -6,9 +6,11 @@
         <div class="card-body">
             <h5 class="card-title">Event Date Start-End</h5>
             <form action="/add-event" method="POST">
-                <p class="card-text"><input type="text" name="event_date" class="form-control" placeholder="Event Start End" aria-label="Username" aria-describedby="basic-addon1"></p>
+                <p class="card-text"><input type="text" name="event_date" class="form-control" placeholder="Event Start End" aria-label="Event Start End" aria-describedby="basic-addon1"></p>
                 <h5 class="card-title">Event Name</h5>
-                <p class="card-text"><input type="text" name="event_name" class="form-control" placeholder="Event Name" aria-label="Username" aria-describedby="basic-addon1"></p>
+                <p class="card-text"><input type="text" name="event_name" class="form-control" placeholder="Event Name" aria-label="EventNaem" aria-describedby="basic-addon1"></p>
+                <h5 class="card-title">Event Max Redem</h5>
+                <p class="card-text"><input type="text" name="event_max_redem" class="form-control" placeholder="Event Max Redem" aria-label="redem_max_event" aria-describedby="basic-addon1"></p>
                 <h5 class="card-title">Event Status</h5>
                 <select name="activate_deactive" id="activate_deactive">
                   <option value="True">Active</option>
@@ -27,6 +29,7 @@
         <th scope="col">ID</th>
         <th scope="col">Events Date</th>
         <th scope="col">Events Name</th>
+        <th scope="col">Maximum Event Redeem</th>
         <th scope="col">Events Status</th>
       </tr>
     </thead>
@@ -38,6 +41,7 @@
             <th scope="row">{{event.id}}</th>
             <td>{{event.event_date}}</td>
             <td>{{event.event_name}}</td>
+            <td>{{event.max_redem}}</td>
             {% if event.status_event %}
               <td><div class="btn btn-primary">Active</div></td>
             {% else %}

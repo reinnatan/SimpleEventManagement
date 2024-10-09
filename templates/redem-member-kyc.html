@@ -1,1 +1,40 @@
 {% include 'header.html' %}
+
+</div>
+    <div class="card-body">
+        <form action="/add-event" method="POST">
+            <p class="card-text"><input type="text" name="event_date" class="form-control" placeholder="Enter KYC" aria-label="Event Start End" aria-describedby="basic-addon1"></p>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+    </div>
+</div>
+
+<table class="table table-striped"></table>
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Events Date</th>
+        <th scope="col">Events Name</th>
+        <th scope="col">Maximum Event Redeem</th>
+        <th scope="col">Events Status</th>
+      </tr>
+    </thead>
+
+    <tbody>
+     {% for event in events%}
+      {{event.status_event}}
+        <tr>
+            <th scope="row">{{event.id}}</th>
+            <td>{{event.event_date}}</td>
+            <td>{{event.event_name}}</td>
+            <td>{{event.max_redem}}</td>
+            {% if event.status_event %}
+              <td><div class="btn btn-primary">Active</div></td>
+            {% else %}
+              <td><div class="btn btn-danger">Deactive</div></td>
+            {% endif %}
+        </tr>
+      {% endfor %}
+    </tbody>
+   
+  </table>

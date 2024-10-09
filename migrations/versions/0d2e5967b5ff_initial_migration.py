@@ -1,8 +1,8 @@
-"""add column in relationship
+"""Initial migration
 
-Revision ID: c3e785346f9a
+Revision ID: 0d2e5967b5ff
 Revises: 
-Create Date: 2024-10-09 18:53:29.679057
+Create Date: 2024-10-09 21:11:45.315376
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'c3e785346f9a'
+revision = '0d2e5967b5ff'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -22,7 +22,8 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('event_date', sa.String(length=50), nullable=False),
     sa.Column('event_name', sa.String(length=100), nullable=False),
-    sa.Column('status_event', sa.Boolean(), nullable=False),
+    sa.Column('status_event', sa.Boolean(), nullable=True),
+    sa.Column('max_redem', sa.Integer(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('users',
