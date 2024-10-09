@@ -14,6 +14,7 @@ migrate = Migrate(app, db)
 
 events_users = db.Table(
     'events_users',
+    db.Column('nik_user', db.String(20)),
     db.Column('events_id', db.Integer, ForeignKey('events.id', name="fk_event_users_id"), primary_key=True),
     db.Column('users_id', db.Integer, ForeignKey('users.id', name="fk_event_users_id"),primary_key=True)
 )
@@ -56,7 +57,7 @@ def add_users():
     address = request.form.get('address_user')
     phone_number = request.form.get('phone_number')
     if user_name != '' and password != '' and activate_deactive !='' and full_name!='' and address!='' and phone_number!='' :
-        activate_deactive = bool(activate_deactive)
+        activate_deactive = eval(activate_deactive)
         user = Users(user_name = user_name, 
                      user_password = password, 
                      is_active = activate_deactive,
@@ -75,7 +76,7 @@ def add_event():
     event_name = request.form.get('event_name')
     activate_deactive = request.form.get('activate_deactive')
     if event_date != '' and event_name != '' and activate_deactive !='':
-        activate_deactive = bool(activate_deactive)
+        activate_deactive = eval(activate_deactive)
         event_model = Events(event_date = event_date, event_name = event_name, status_event = activate_deactive)
         db.session.add(event_model)
         db.session.commit()

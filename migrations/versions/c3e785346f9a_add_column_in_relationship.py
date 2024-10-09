@@ -1,8 +1,8 @@
-"""add naming realationship
+"""add column in relationship
 
-Revision ID: 0bcfcceb773b
+Revision ID: c3e785346f9a
 Revises: 
-Create Date: 2024-10-09 08:07:32.999095
+Create Date: 2024-10-09 18:53:29.679057
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '0bcfcceb773b'
+revision = 'c3e785346f9a'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -38,6 +38,7 @@ def upgrade():
     sa.UniqueConstraint('user_password')
     )
     op.create_table('events_users',
+    sa.Column('nik_user', sa.String(length=20), nullable=True),
     sa.Column('events_id', sa.Integer(), nullable=False),
     sa.Column('users_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['events_id'], ['events.id'], name='fk_event_users_id'),
