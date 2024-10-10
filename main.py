@@ -3,7 +3,7 @@ from importlib.metadata import metadata
 from flask import Flask, redirect, render_template, request, session
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, ForeignKey, Integer, Table
+from sqlalchemy import Column, ForeignKey, Integer, Table, text
 from sqlalchemy.orm import DeclarativeBase
 app = Flask(__name__, static_url_path='/static')
 app.debug = True
@@ -15,8 +15,8 @@ migrate = Migrate(app, db)
 events_users = db.Table(
     'events_users',
     db.Column('nik_user', db.String(20)),
-    db.Column('events_id', db.Integer, ForeignKey('events.id', name="fk_event_users_id"), primary_key=True),
-    db.Column('users_id', db.Integer, ForeignKey('users.id', name="fk_event_users_id"),primary_key=True)
+    db.Column('events_id', db.Integer, ForeignKey('events.id', name="fk_event_users_id"), primary_key=False),
+    db.Column('users_id', db.Integer, ForeignKey('users.id', name="fk_event_users_id"),primary_key=False)
 )
 
 class Events(db.Model):
@@ -96,9 +96,17 @@ def list_event():
 
 @app.route('/redem-member-kyc')
 def redem_member_kyc():
+    sql = text('select events.id, events.event_name, events.event_date, events_users.nik_user ,count(events_users.nik_user) as "Redem Count" from events inner join events_users on(events.id=events_users.users_id) group by events_users.nik_user;')
+    list_row = []
+    with db.engine.connect() as connection:
+        result = connection.execute(sql)
+        for row in result:
+            list_row.append(row)
+    
     users = Users.query.all()
     events = Events.query.all()
-    return render_template('redem-member-kyc.html', events = events, users = users)
+    
+    return render_template('redem-member-kyc.html', users = users, events = events, list_row = list_row)
 
 @app.route('/add-redem', methods=["POST"])
 def add_redem_user():
@@ -113,9 +121,9 @@ def add_redem_user():
         )
         db.session.execute(new_event_user)
         db.session.commit()
-
-    users = Users.query.all()
-    events = Events.query.all()
+    
+    users = db.session.query(Users.id, Users.full_name, Users.address, Users.phone_number, Users.is_active).all() 
+    events = events = db.session.query(Events.id, Events.event_date, Events.event_name, Events.status_event, Events.max_redem).all()
     return render_template('redem-member-kyc.html', events = events, users = users)
 
 if __name__ == "__main__":

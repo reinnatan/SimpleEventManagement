@@ -45,25 +45,22 @@
     <thead>
       <tr>
         <th scope="col">ID</th>
-        <th scope="col">Events Date</th>
         <th scope="col">Events Name</th>
-        <th scope="col">Maximum Event Redeem</th>
-        <th scope="col">Events Status</th>
+        <th scope="col">Events Date</th>
+        <th scope="col">Users Nik</th>
+        <th scope="col">Redeem Count By users</th>
+   
       </tr>
     </thead>
 
     <tbody>
-     {% for event in events%}
+     {% for row in list_row%}
         <tr>
-            <th scope="row">{{event.id}}</th>
-            <td>{{event.event_date}}</td>
-            <td>{{event.event_name}}</td>
-            <td>{{event.max_redem}}</td>
-            {% if event.status_event %}
-              <td><div class="btn btn-primary">Active</div></td>
-            {% else %}
-              <td><div class="btn btn-danger">Deactive</div></td>
-            {% endif %}
+            <td>{{row[0]}}</td>
+            <td>{{row[1]}}</td>
+            <td>{{row[2]}}</td>
+            <td>{{row[3]}}</td>
+            <td>{{row[4]}}</td>
         </tr>
       {% endfor %}
     </tbody>
