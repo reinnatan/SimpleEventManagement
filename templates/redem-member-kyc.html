@@ -3,16 +3,24 @@
 
 <script>
     $(document).ready(function(){
-        var strContent = '<p id="input-select-value"><h5 class="card-title">Event Name</h5>'+
+        var strContent = '<p id="input-select-value"><h5 class="card-title">Event Name<br/>'+
                             '<select name="event_value" id="event_value">'+
-                                '{% for event in events%} <option value={{event.id}}>{{event.event_name}}</option>{% endfor %}</select>'+
-                                '<br/><br/><h5 class="card-title">Users</h5><select name="user_value" id="user_value">{% for user in users%}<option value={{user.id}}>{{user.full_name}}</option> {% endfor %}'+
-                                ' </select></p>';
+                                '{% for event in events%} <option value={{event.id}}>{{event.event_name}}</option>{% endfor %}</select></h5>'+
+                                '<h5 class="card-title">Users<br/><select name="user_value" id="user_value"></h5>{% for user in users%}<option value={{user.id}}>{{user.full_name}}</option> {% endfor %}'+
+                                '</select>'+
+                                '<br/><h5 class="card-title">Nik Users<br/><input type="text" name="nik_input" id="nik_input"/></p>';
        
         $("#create-redeem").click(function(){
-            
-            let dialog = xdialog.create({title: 'Hello, xdialog', body: strContent, 
+            let dialog = xdialog.create({title: 'Redeem to user', body: strContent, 
                 onok:function(){
+                    var event_id = $('#event_value').find(":selected").val();
+                    var user_id = $('#user_value').find(":selected").val();
+                    var nik_user = $('#nik_input').val();
+                    
+                    $.post( "http://localhost:5000/add-redem", { user_id: user_id, event_id: event_id, nik_user }).done(function( data, status ) {
+                        alert( "Data Loaded: " + data);
+                    });
+
                 },
                 oncancel:function(){
                 }

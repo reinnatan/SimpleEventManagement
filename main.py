@@ -100,5 +100,23 @@ def redem_member_kyc():
     events = Events.query.all()
     return render_template('redem-member-kyc.html', events = events, users = users)
 
+@app.route('/add-redem', methods=["POST"])
+def add_redem_user():
+    user_id = request.form.get('user_id')
+    event_id = request.form.get('event_id')
+    nik_user = request.form.get('nik_user')
+    if user_id != '' and event_id != '' and nik_user !='':
+        new_event_user = events_users.insert().values(
+            events_id = event_id,
+            users_id = user_id,
+            nik_user = nik_user
+        )
+        db.session.execute(new_event_user)
+        db.session.commit()
+
+    users = Users.query.all()
+    events = Events.query.all()
+    return render_template('redem-member-kyc.html', events = events, users = users)
+
 if __name__ == "__main__":
     app.run()
