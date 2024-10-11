@@ -96,7 +96,7 @@ def list_event():
 
 @app.route('/redem-member-kyc')
 def redem_member_kyc():
-    sql = text('select events.id, events.event_name, events.event_date, events_users.nik_user ,count(events_users.nik_user) as "Redem Count" from events inner join events_users on(events.id=events_users.users_id) group by events_users.nik_user;')
+    sql = text('select events.id, events.event_name, events.event_date, users.full_name, events.max_redem ,count(events_users.nik_user) as "Redem Count" from events inner join events_users on(events.id=events_users.users_id) inner join users on(users.id=events_users.users_id) group by events_users.nik_user;')
     list_row = []
     with db.engine.connect() as connection:
         result = connection.execute(sql)
@@ -113,7 +113,14 @@ def add_redem_user():
     user_id = request.form.get('user_id')
     event_id = request.form.get('event_id')
     nik_user = request.form.get('nik_user')
-    if user_id != '' and event_id != '' and nik_user !='':
+    sql = text('select events.id, events.event_name, events.event_date, users.full_name, events.max_redem ,count(events_users.nik_user) as "Redem Count" from events inner join events_users on(events.id=events_users.users_id) inner join users on(users.id=events_users.users_id) where events_users.events_id='+event_id+' and events_users.users_id='+user_id+' group by events_users.nik_user;')
+    list_row = []
+    with db.engine.connect() as connection:
+        result = connection.execute(sql)
+        for row in result:
+            list_row.append(row)
+
+    if user_id != '' and event_id != '' and nik_user !='' and list_row[0][5]<list_row[0][4]:
         new_event_user = events_users.insert().values(
             events_id = event_id,
             users_id = user_id,
@@ -121,10 +128,10 @@ def add_redem_user():
         )
         db.session.execute(new_event_user)
         db.session.commit()
+        return "Success for redeem from this event"
+    else:
+        return "User has limit redeem for this event"
     
-    users = db.session.query(Users.id, Users.full_name, Users.address, Users.phone_number, Users.is_active).all() 
-    events = events = db.session.query(Events.id, Events.event_date, Events.event_name, Events.status_event, Events.max_redem).all()
-    return render_template('redem-member-kyc.html', events = events, users = users)
 
 if __name__ == "__main__":
     app.run()

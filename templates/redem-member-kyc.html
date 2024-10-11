@@ -18,9 +18,9 @@
                     var nik_user = $('#nik_input').val();
                     
                     $.post( "http://localhost:5000/add-redem", { user_id: user_id, event_id: event_id, nik_user }).done(function( data, status ) {
-                        alert( "Data Loaded: " + data);
+                       alert(data);
+                       location.reload();
                     });
-
                 },
                 oncancel:function(){
                 }
@@ -47,9 +47,9 @@
         <th scope="col">ID</th>
         <th scope="col">Events Name</th>
         <th scope="col">Events Date</th>
-        <th scope="col">Users Nik</th>
+        <th scope="col">Full Username</th>
+        <th scope="col">Max Redeem Count Events</th>
         <th scope="col">Redeem Count By users</th>
-   
       </tr>
     </thead>
 
@@ -61,6 +61,7 @@
             <td>{{row[2]}}</td>
             <td>{{row[3]}}</td>
             <td>{{row[4]}}</td>
+            <td>{{row[5]}}</td>
         </tr>
       {% endfor %}
     </tbody>
